@@ -59,6 +59,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
         }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        var indexPath = tableView.indexPathForSelectedRow()
+        var movie = movies[indexPath!.row]
+        
+        var detailsViewController = segue.destinationViewController as MovieDetailsViewController
+        detailsViewController.movie = movie
+        
+    }
+    
+    
 
     /*
     // MARK: - Navigation
