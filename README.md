@@ -1,10 +1,10 @@
-Gif
+Gif </br>
 <img src="https://raw.githubusercontent.com/gauthamk/RottenTomatoes/master/rotten-tomatoes.gif" />
 
-Time Taken
+Time Taken </br>
 8 hours
 
-Project Requirements
+Project Requirements </br>
 * User can view a list of movies from Rotten Tomatoes. Poster images must be loading asynchronously. ✔ <br />
 * User can view movie details by tapping on a cell ✔ <br />
 * User sees loading state while waiting for movies API. You can use one of the 3rd party libraries at cocoacontrols.com. ✘ <br />
