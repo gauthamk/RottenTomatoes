@@ -10,29 +10,59 @@ import UIKit
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var errorLabel: UILabel!
+    
     var movies: [NSDictionary] = []
+    var refreshCtrl: UIRefreshControl!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.errorLabel.hidden = false
         tableView.delegate = self
         tableView.dataSource = self
-        // Do any additional setup after loading the view.
+        self.errorLabel.alpha = 0
+        
+        
+        self.refreshCtrl = UIRefreshControl()
+        self.refreshCtrl.attributedTitle = NSAttributedString(string: "Pull down to refresh..")
+        self.refreshCtrl.addTarget(self, action: "loadMovies", forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(refreshCtrl)
+        
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        ProgressHUD.show("Loading movies...")
+        loadMovies()
+    }
+
+    func loadMovies() {
+        self.refreshCtrl.beginRefreshing()
+        ProgressHUD.show("Loading movies..")
         
         var url = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=dagqdghwaq3e3mxyrp7kmmj5&limit=20&country=us";
         
         var request = NSURLRequest(URL: NSURL(string: url))
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data:NSData!, error:NSError!) -> Void in
-            
             var object = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
-            self.movies = object["movies"] as [NSDictionary]
+            
+            if(data == nil) {
+                //show the error label
+                ProgressHUD.showError("Could not fetch movies")
+                self.errorLabel.alpha = 1
+            }else {
+                self.errorLabel.alpha = 0
+                self.movies = object["movies"] as [NSDictionary]
+                ProgressHUD.dismiss()
+                self.refreshCtrl.endRefreshing()
+            }
             
             self.tableView.reloadData()
             
         }
         
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

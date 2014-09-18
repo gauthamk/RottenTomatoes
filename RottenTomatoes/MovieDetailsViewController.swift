@@ -24,13 +24,11 @@ class MovieDetailsViewController: UIViewController {
 
         var title = movie["title"] as? String
 
-        
         //Image
         var posters = movie["posters"] as NSDictionary
         var posterThumbUrl = posters["thumbnail"] as String
         var originalUrl = posterThumbUrl.stringByReplacingOccurrencesOfString("tmb", withString: "org", options: NSStringCompareOptions.LiteralSearch, range: nil)
         posterBgImageView.setImageWithURL(NSURL(string: originalUrl))
-
         
         //Ratings
         
